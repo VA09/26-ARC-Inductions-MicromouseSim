@@ -10,10 +10,10 @@ from geometry_msgs.msg import Twist
 # ==========================================
 # These four parameters MUST add up to exactly 30!
 # ==========================================
-TOP_SPEED = 8
-ACCELARATION = 7
-TURN_SPEED = 5
-SENSOR_RANGE = 10
+TOP_SPEED = 10
+ACCELARATION = 6
+TURN_SPEED = 7
+SENSOR_RANGE = 7
 
 class StudentSolver(Node):
     def __init__(self):
@@ -61,7 +61,7 @@ class StudentSolver(Node):
         # 2. Left side is open -> Curve around the corner
         elif d_left > 0.8:
             cmd.linear.x = 0.3
-            cmd.angular.z = 1.2   # Turn left
+            cmd.angular.z = 1.5   # Turn left
             
         # 3. Wall hugging -> P-Controller
         else:
