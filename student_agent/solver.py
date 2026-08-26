@@ -37,27 +37,27 @@ class StudentSolver(Node):
 
     def scan_callback(self, msg):
 
-    d_left = msg.ranges[0]
-    d_front = msg.ranges[1]
-    d_right = msg.ranges[2]
-
-    cmd = Twist()
-
-    if self.state == "moving":
-        cmd.linear.x = 0.5
-        cmd.angular.z = 0
-
-        if d_front < 0.65:
-            self.state = "turning"
-
-    elif self.state == "turning":
-        cmd.linear.x = 0
-        cmd.angular.z = -1.5
-
-        if d_front > 0.8:
-            self.state = "moving"
-
-    self.cmd_pub.publish(cmd)
+        d_left = msg.ranges[0]
+        d_front = msg.ranges[1]
+        d_right = msg.ranges[2]
+    
+        cmd = Twist()
+    
+        if self.state == "moving":
+            cmd.linear.x = 0.5
+            cmd.angular.z = 0
+    
+            if d_front < 0.65:
+                self.state = "turning"
+    
+        elif self.state == "turning":
+            cmd.linear.x = 0
+            cmd.angular.z = -1.5
+    
+            if d_front > 0.8:
+                self.state = "moving"
+    
+        self.cmd_pub.publish(cmd)
 
 def main(args=None):
     rclpy.init(args=args)
