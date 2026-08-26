@@ -48,12 +48,10 @@ class StudentSolver(Node):
         if self.state == "moving":
             cmd.linear.x = 0.5
             cmd.angular.z = 0.0
-    
+            
             if d_front < 0.65:
                 self.state = "turning"
                 self.turn_count += 1
-                if self.turn_count%2 == 0:
-                    cmd.angular.z = 1.5
                 else:
                     cmd.angular.z = -1.5
             if d_left < 0.3:
