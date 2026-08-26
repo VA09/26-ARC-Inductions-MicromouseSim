@@ -45,13 +45,13 @@ class StudentSolver(Node):
     
         if self.state == "moving":
             cmd.linear.x = 0.5
-            cmd.angular.z = 0
+            cmd.angular.z = 0.0
     
             if d_front < 0.65:
                 self.state = "turning"
     
         elif self.state == "turning":
-            cmd.linear.x = 0
+            cmd.linear.x = 0.0
             cmd.angular.z = -1.5
     
             if d_front > 0.8:
