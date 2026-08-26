@@ -40,8 +40,6 @@ class StudentSolver(Node):
         d_left = msg.ranges[0]
         d_front = msg.ranges[1]
         d_right = msg.ranges[2]
-
-        print(d_left, d_front, d_right)
     
         cmd = Twist()
     
@@ -51,6 +49,10 @@ class StudentSolver(Node):
     
             if d_front < 0.65:
                 self.state = "turning"
+            if d_left < 0.3:
+                cmd.angular.z = -0.5
+            if d_right < 0.3:
+                cmd.angular.z = 0.5
     
         elif self.state == "turning":
             cmd.linear.x = 0.0
