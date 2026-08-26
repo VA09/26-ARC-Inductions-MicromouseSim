@@ -7,9 +7,6 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
-# ==========================================
-# These four parameters MUST add up to exactly 30!
-# ==========================================
 TOP_SPEED = 10
 ACCELARATION = 6
 TURN_SPEED = 7
@@ -18,6 +15,7 @@ SENSOR_RANGE = 7
 class StudentSolver(Node):
     def __init__(self):
         super().__init__('student_solver')
+        self.state == "moving"
         
         # subscriber to read sensor values (L,F,R)
         self.scan_sub = self.create_subscription(
@@ -51,29 +49,16 @@ class StudentSolver(Node):
         
         cmd = Twist()
         
-        #-------- DEMO LOGIC, REMOVE THIS AND WRITE YOUR OWN ---------
-        # 1. Front is blocked -> Pivot strictly in place (do not move forward!)
-        # Increased threshold to 0.65 so it has room to spin without its 0.15 radius clipping the front wall
-        if d_front < 0.65:
-            cmd.linear.x = 0.0
-            cmd.angular.z = -1.5  # Spin clockwise (right)
-            
-        # 2. Left side is open -> Curve around the corner
-        elif d_left > 0.8:
-            cmd.linear.x = 0.3
-            cmd.angular.z = 1.5   # Turn left
-            
-        # 3. Wall hugging -> P-Controller
-        else:
-            cmd.linear.x = 0.5
-            
-            # The cell is 1.0 units wide. Perfect center is 0.5.
-            target_distance = 0.5 
-            error = d_left - target_distance
-            
-            # Multiply error by a gain to steer back to the center
-            cmd.angular.z = error * 3.0
-        #-----------------------------------------------------------------
+       if self.state == "moving":
+           cmd.linear.x = 0.5 
+           cmd.angular.z = 0
+           if d_front < 0.65:
+               self.state = "turning"
+       elif self.state == "turning":
+           cmd.linear.x = 0
+           cmd.angular.z = 1.5 
+           if d_front > 0.8:
+               self.state = "moving"
             
         self.cmd_pub.publish(cmd)
 
