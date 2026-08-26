@@ -50,7 +50,7 @@ class StudentSolver(Node):
             if d_left>d_right:
                 self.direction = "left"
             elif d_left<d_right:    
-                self.direction = "right":
+                self.direction = "right"
     
             if d_front < 0.65:
                 self.state = "turning"
