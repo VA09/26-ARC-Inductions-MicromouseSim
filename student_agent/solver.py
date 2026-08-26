@@ -40,6 +40,8 @@ class StudentSolver(Node):
         d_left = msg.ranges[0]
         d_front = msg.ranges[1]
         d_right = msg.ranges[2]
+
+        print(d_left, d_front, d_right)
     
         cmd = Twist()
     
