@@ -17,6 +17,7 @@ class StudentSolver(Node):
         super().__init__('student_solver')
         self.state = "moving"
         self.direction = None
+        self.turn_count = 0
         
         # subscriber to read sensor values (L,F,R)
         self.scan_sub = self.create_subscription(
@@ -47,21 +48,29 @@ class StudentSolver(Node):
         if self.state == "moving":
             cmd.linear.x = 0.5
             cmd.angular.z = 0.0
-            if d_left>d_right:
-                self.direction = "left"
-            elif d_left<d_right:    
-                self.direction = "right"
     
             if d_front < 0.65:
                 self.state = "turning"
-                if self.direction == "left":
-                    cmd.angular.z = -0.5
-                elif self.direction == "right":
-                    cmd.angular.z = 0.5 
+                self.turn_count += 1
+                if self.turn_count%2 == 0:
+                    cmd.angular.z = 1.5
+                else:
+                    cmd.angular.z = -1.5
             elif d_left < 0.3:
                 cmd.angular.z = -0.5
             elif d_right < 0.3:
                 cmd.angular.z = 0.5
+            if d_left > 0.8:
+                cmd.linear.x = 0.3
+                cmd.angular.z = 1.0
+
+            elif d_front > 0.65:
+                cmd.linear.x = 0.5
+                cmd.angular.z = 0.0
+
+            else:
+                cmd.linear.x = 0.0
+                cmd.angular.z = -1.5
     
         elif self.state == "turning":
             cmd.linear.x = 0.0
