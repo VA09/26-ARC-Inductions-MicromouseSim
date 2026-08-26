@@ -15,7 +15,7 @@ SENSOR_RANGE = 7
 class StudentSolver(Node):
     def __init__(self):
         super().__init__('student_solver')
-        self.state == "moving"
+        self.state = "moving"
         
         # subscriber to read sensor values (L,F,R)
         self.scan_sub = self.create_subscription(
