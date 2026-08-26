@@ -65,10 +65,6 @@ class StudentSolver(Node):
             elif d_front > 0.65:
                 cmd.linear.x = 0.5
                 cmd.angular.z = 0.0
-
-            else:
-                cmd.linear.x = 0.0
-                cmd.angular.z = -1.5
     
         elif self.state == "turning":
             cmd.linear.x = 0.0
