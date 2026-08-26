@@ -56,9 +56,9 @@ class StudentSolver(Node):
                     cmd.angular.z = 1.5
                 else:
                     cmd.angular.z = -1.5
-            elif d_left < 0.3:
+            if d_left < 0.3:
                 cmd.angular.z = -0.5
-            elif d_right < 0.3:
+            if d_right < 0.3:
                 cmd.angular.z = 0.5
             if d_left > 0.8:
                 cmd.linear.x = 0.3
