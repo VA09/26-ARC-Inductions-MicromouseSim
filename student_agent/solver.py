@@ -36,30 +36,28 @@ class StudentSolver(Node):
         self.get_logger().info(f"Stats -> Speed: {TOP_SPEED}, Accel: {ACCELARATION}, Turn: {TURN_SPEED}, Range: {SENSOR_RANGE}")
 
     def scan_callback(self, msg):
-        """
-        This function runs every time a new sensor reading is received (at 20 Hz).
-        msg.ranges contains the distances:
-        msg.ranges[0] -> Left ray distance
-        msg.ranges[1] -> Front ray distance
-        msg.ranges[2] -> Right ray distance
-        """
-        d_left = msg.ranges[0]
-        d_front = msg.ranges[1]
-        d_right = msg.ranges[2]
-        
-        cmd = Twist()
-        
-       if self.state == "moving":
-    cmd.linear.x = 0.5 
-    cmd.angular.z = 0
-    if d_front < 0.65:
-        self.state = "turning"
+
+    d_left = msg.ranges[0]
+    d_front = msg.ranges[1]
+    d_right = msg.ranges[2]
+
+    cmd = Twist()
+
+    if self.state == "moving":
+        cmd.linear.x = 0.5
+        cmd.angular.z = 0
+
+        if d_front < 0.65:
+            self.state = "turning"
+
     elif self.state == "turning":
         cmd.linear.x = 0
-        cmd.angular.z = 1.5 
+        cmd.angular.z = -1.5
+
         if d_front > 0.8:
             self.state = "moving"
-        self.cmd_pub.publish(cmd)
+
+    self.cmd_pub.publish(cmd)
 
 def main(args=None):
     rclpy.init(args=args)
