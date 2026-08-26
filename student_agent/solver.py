@@ -51,9 +51,6 @@ class StudentSolver(Node):
             
             if d_front < 0.65:
                 self.state = "turning"
-                self.turn_count += 1
-                else:
-                    cmd.angular.z = -1.5
             if d_left < 0.3:
                 cmd.angular.z = -0.5
             if d_right < 0.3:
