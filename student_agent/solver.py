@@ -61,8 +61,6 @@ class StudentSolver(Node):
 
         def clip(v,lo,hi):
             return max(lo,min(v,hi))
-        if self.last_scan is None:
-            self.last_scan = (d_left,d_front,d_right)
         if self.side == "right":
             s = 1.0
             d_side = d_right
@@ -71,6 +69,8 @@ class StudentSolver(Node):
             d_side = d_left
 
         drift = (abs(d_left-self.last_scan[0]) + abs(d_front-self.last_scan[1]) + abs(d_right-self.last_scan[2]))
+        self.last_scan = (d_left,d_front,d_right)
+
         if drift<0.02:
             self.stuck_count = self.stuck_count +1 
         if self.stuck_count>40:
@@ -78,9 +78,9 @@ class StudentSolver(Node):
             cmd.angular.z = -s*MAX_ANG*0.85
             if self.stuck_count>65:
                 self.stuck_count = 0
-        elif d_side>d_open and d_front>F_STOP:
+        elif d_side>SIDE_OPEN and d_front>F_STOP:
             cmd.linear.x = 0.35*MAX_LIN
-            cmd.angular.x = -s*MAX_ANG*0.85
+            cmd.angular.z = -s*MAX_ANG*0.85
         elif d_front<F_STOP:
             cmd.linear.x = 0.0
             cmd.angular.z = s*MAX_ANG
@@ -90,12 +90,12 @@ class StudentSolver(Node):
             self.prev_error = error
             cmd.angular.z = clip(KP * error + KD * deriv, -MAX_ANG, MAX_ANG)
             speed_scale = clip(d_front / F_SLOW, 0.25, 1.0)
-            speed_scale *= (1.0 - 0.4 * abs(ang) / MAX_ANG)
+            speed_scale *= (1.0 - 0.4 * abs(cmd.angular.z) / MAX_ANG)
             cmd.linear.x = MAX_LIN * speed_scale
         if self.open_count > 15:
             cmd.linear.x *=0.25
-        cmd.linear.x  = clip(lin, -0.2 * MAX_LIN, MAX_LIN)
-        cmd.angular.z = clip(ang, -MAX_ANG, MAX_ANG)
+        cmd.linear.x  = clip(cmd.linear.x, -0.2 * MAX_LIN, MAX_LIN)
+        cmd.angular.z = clip(cmd.angular.z, -MAX_ANG, MAX_ANG)
         self.cmd_pub.publish(cmd)
 
 def main(args=None):
