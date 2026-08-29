@@ -37,39 +37,45 @@ class StudentSolver(Node):
         self.get_logger().info("Student Solver Node initialized successfully.")
         self.get_logger().info(f"Stats -> Speed: {TOP_SPEED}, Accel: {ACCELARATION}, Turn: {TURN_SPEED}, Range: {SENSOR_RANGE}")
 
+        self.side = "left"
+        self.prev_error = 0.0
+        self.stuck_count = 0
+        self.open_count = 0
+        self.last_scan = None
+
     def scan_callback(self, msg):
 
         d_left = msg.ranges[0]
         d_front = msg.ranges[1]
         d_right = msg.ranges[2]
+
+        TARGET = 0.5
+        F_STOP = 0.65
+        F_SLOW = 1.3
+        SIDE_OPEN = 0.8
+        MAX_LIN = 0.5
+        MAX_ANG = 1.5 
+        KP,KD = 3.0,1.0
     
         cmd = Twist()
-    
-        if self.state == "moving":
-            cmd.linear.x = 0.5
-            cmd.angular.z = 0.0
-            
-            if d_front < 0.65:
-                self.state = "turning"
-            if d_left < 0.3:
-                cmd.angular.z = -0.5
-            if d_right < 0.3:
-                cmd.angular.z = 0.5
-            if d_left > 0.8:
-                cmd.linear.x = 0.3
-                cmd.angular.z = 1.0
 
-            elif d_front > 0.65:
-                cmd.linear.x = 0.5
-                cmd.angular.z = 0.0
-    
-        elif self.state == "turning":
-            cmd.linear.x = 0.0
-            cmd.angular.z = -1.5
-    
-            if d_front > 0.8:
-                self.state = "moving"
-    
+        def clip(v,lo,hi):
+            return max(lo,min(v,hi))
+        if self.last_scan is None:
+            self.last_scan = (d_left,d_front,d_right)
+        if self.side == "right":
+            s = 1.0
+            d_side = d_right
+        else:
+            s=-1.0
+            d_side = d_left
+
+        drift = (abs(d_left-self.last_scan[0]) + abs(d_front-self.last_scan[1]) + abs(d_right-self.last_scan[2]))
+        if drift<0.02:
+            self.stuck_count = self.stuck_count +1 
+        if self.stuck_count>40:
+            lin = -0.15*MAX_LIN
+            ang = -s*MAX_ANG*0.85
         self.cmd_pub.publish(cmd)
 
 def main(args=None):
