@@ -67,6 +67,9 @@ class StudentSolver(Node):
         else:
             s=-1.0
             d_side = d_left
+        if self.last_scan is None:
+            self.last_scan = (d_left, d_front, d_right)
+            return
 
         drift = (abs(d_left-self.last_scan[0]) + abs(d_front-self.last_scan[1]) + abs(d_right-self.last_scan[2]))
         self.last_scan = (d_left,d_front,d_right)
