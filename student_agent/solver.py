@@ -7,10 +7,10 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
-TOP_SPEED = 10
-ACCELARATION = 6
+TOP_SPEED = 8
+ACCELARATION = 5
 TURN_SPEED = 7
-SENSOR_RANGE = 7
+SENSOR_RANGE = 10
 
 class StudentSolver(Node):
     def __init__(self):
