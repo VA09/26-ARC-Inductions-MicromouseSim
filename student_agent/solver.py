@@ -81,7 +81,7 @@ class StudentSolver(Node):
             self.turn_count -= 1
         if drift<0.02:
             self.stuck_count = self.stuck_count +1 
-        if self.stuck_count>40:
+        if self.stuck_count>20:
             cmd.linear.x = -0.15*MAX_LIN
             cmd.angular.z = -s*MAX_ANG*0.85
             if self.stuck_count>65:
@@ -91,7 +91,7 @@ class StudentSolver(Node):
             cmd.angular.z = -s*MAX_ANG*0.85
         elif d_front<F_STOP:
             cmd.linear.x = 0.0
-            cmd.angular.z = -s*MAX_ANG
+            cmd.angular.z = s*MAX_ANG
             self.turn_count = 10
             self.turn_direction = s
         else:
