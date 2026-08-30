@@ -7,10 +7,10 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
-TOP_SPEED = 8
-ACCELARATION = 5
-TURN_SPEED = 7
-SENSOR_RANGE = 10
+TOP_SPEED = 10
+ACCELARATION = 6
+TURN_SPEED = 5
+SENSOR_RANGE = 9
 
 class StudentSolver(Node):
     def __init__(self):
@@ -81,7 +81,7 @@ class StudentSolver(Node):
             self.turn_count -= 1
         if drift<0.02:
             self.stuck_count = self.stuck_count +1 
-        if self.stuck_count>20:
+        if self.stuck_count>15:
             cmd.linear.x = -0.15*MAX_LIN
             cmd.angular.z = -s*MAX_ANG*0.85
             if self.stuck_count>65:
