@@ -88,7 +88,7 @@ class StudentSolver(Node):
                 self.stuck_count = 0
         if d_side > SIDE_OPEN:
             cmd.linear.x = 0.35 * MAX_LIN
-            cmd.angular.z = -s * MAX_ANG * 0.5
+            cmd.angular.z = -s * MAX_ANG * 0.3
 
         if d_front>F_STOP:
             cmd.linear.x = 0.5 * MAX_LIN
