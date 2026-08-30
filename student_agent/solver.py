@@ -88,7 +88,7 @@ class StudentSolver(Node):
                 self.stuck_count = 0
         elif d_side>SIDE_OPEN and d_front>F_STOP:
             cmd.linear.x = 0.35*MAX_LIN
-            cmd.angular.z = -s*MAX_ANG*0.85
+            cmd.angular.z = -s*MAX_ANG*0.2
         elif d_front<F_STOP:
             cmd.linear.x = 0.0
             cmd.angular.z = s*MAX_ANG
