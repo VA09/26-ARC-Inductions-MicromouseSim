@@ -91,7 +91,7 @@ class StudentSolver(Node):
             cmd.angular.z = -s*MAX_ANG*0.85
         elif d_front<F_STOP:
             cmd.linear.x = 0.0
-            cmd.angular.z = s*MAX_ANG
+            cmd.angular.z = -s*MAX_ANG
             self.turn_count = 10
             self.turn_direction = s
         else:
