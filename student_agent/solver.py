@@ -86,14 +86,14 @@ class StudentSolver(Node):
             cmd.angular.z = -s*MAX_ANG*0.85
             if self.stuck_count>65:
                 self.stuck_count = 0
-        elif d_side>SIDE_OPEN and d_front>F_STOP:
-            cmd.linear.x = 0.8*MAX_LIN
-            cmd.angular.z = -s*MAX_ANG*0.2
-        elif d_front<F_STOP:
+        if d_side > SIDE_OPEN:
+            cmd.linear.x = 0.35 * MAX_LIN
+            cmd.angular.z = -s * MAX_ANG * 0.25
+
+        elif d_front < F_STOP:
             cmd.linear.x = 0.0
-            cmd.angular.z = s*MAX_ANG
-            self.turn_count = 10
-            self.turn_direction = s
+            cmd.angular.z = s * MAX_ANG
+
         else:
             error = s*(TARGET-d_side)
             deriv = error - self.prev_error
