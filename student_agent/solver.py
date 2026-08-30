@@ -95,7 +95,7 @@ class StudentSolver(Node):
 
         elif d_front < F_STOP:
             cmd.linear.x = 0.0
-            cmd.angular.z = s * MAX_ANG
+            cmd.angular.z = -s * MAX_ANG
 
         else:
             error = s*(TARGET-d_side)
