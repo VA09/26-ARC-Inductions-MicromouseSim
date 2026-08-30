@@ -42,6 +42,8 @@ class StudentSolver(Node):
         self.stuck_count = 0
         self.open_count = 0
         self.last_scan = None
+        self.turn_count = 0
+        self.turn_direction = 0
 
     def scan_callback(self, msg):
 
@@ -73,7 +75,10 @@ class StudentSolver(Node):
 
         drift = (abs(d_left-self.last_scan[0]) + abs(d_front-self.last_scan[1]) + abs(d_right-self.last_scan[2]))
         self.last_scan = (d_left,d_front,d_right)
-
+        if self.turn_count > 0:
+            cmd.linear.x = 0.0
+            cmd.angular.z = 1.5
+            self.turn_count -= 1
         if drift<0.02:
             self.stuck_count = self.stuck_count +1 
         if self.stuck_count>40:
@@ -87,6 +92,8 @@ class StudentSolver(Node):
         elif d_front<F_STOP:
             cmd.linear.x = 0.0
             cmd.angular.z = s*MAX_ANG
+            self.turn_count = 10
+            self.turn_direction = s
         else:
             error = s*(TARGET-d_side)
             deriv = error - self.prev_error
